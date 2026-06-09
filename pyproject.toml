@@ -1,0 +1,19 @@
+[build-system]
+requires = ["setuptools>=69"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "wp-learndash-epub"
+version = "0.2.0"
+description = "Build clean EPUB files from WordPress + LearnDash book/course pages."
+requires-python = ">=3.11"
+dependencies = [
+    "beautifulsoup4>=4.12",
+    "rich>=13.7",
+]
+
+[project.scripts]
+wp-learndash-epub = "wp_learndash_epub.cli:main"
+
+[tool.setuptools.packages.find]
+where = ["src"]

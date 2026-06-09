@@ -1,0 +1,7 @@
+Metadata-Version: 2.4
+Name: wp-learndash-epub
+Version: 0.2.0
+Summary: Build clean EPUB files from WordPress + LearnDash book/course pages.
+Requires-Python: >=3.11
+Requires-Dist: beautifulsoup4>=4.12
+Requires-Dist: rich>=13.7

@@ -1,0 +1,2 @@
+[console_scripts]
+wp-learndash-epub = wp_learndash_epub.cli:main
