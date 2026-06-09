@@ -2,12 +2,14 @@ README.md
 pyproject.toml
 src/wp_learndash_epub/__init__.py
 src/wp_learndash_epub/__main__.py
+src/wp_learndash_epub/batch.py
 src/wp_learndash_epub/cli.py
 src/wp_learndash_epub/config.py
 src/wp_learndash_epub/epub.py
 src/wp_learndash_epub/html_clean.py
 src/wp_learndash_epub/http.py
 src/wp_learndash_epub/models.py
+src/wp_learndash_epub/naming.py
 src/wp_learndash_epub/source.py
 src/wp_learndash_epub/ui.py
 src/wp_learndash_epub.egg-info/PKG-INFO

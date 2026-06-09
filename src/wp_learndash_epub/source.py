@@ -1,8 +1,6 @@
 from __future__ import annotations
 
-import hashlib
 import re
-from pathlib import Path
 from urllib.parse import urlencode, urljoin, urlparse
 
 from bs4 import BeautifulSoup, Tag
@@ -22,15 +20,6 @@ from .models import Book, Chapter, Credentials, LessonLink
 def rest_api_base(source_url: str) -> str:
     parsed = urlparse(source_url)
     return f"{parsed.scheme}://{parsed.netloc}/wp-json"
-
-
-def safe_file_stem(title: str, source_url: str) -> str:
-    text = re.sub(r"[\\/:*?\"<>|]+", "", title)
-    text = re.sub(r"\s+", "-", text).strip("-")
-    if text:
-        return text[:80]
-    digest = hashlib.sha1(source_url.encode("utf-8")).hexdigest()[:10]
-    return f"book-{digest}"
 
 
 def book_title(soup: BeautifulSoup) -> str:
@@ -216,7 +205,3 @@ def parse_lessons_via_rest(book: Book, credentials: Credentials) -> list[Chapter
     if not chapters:
         raise RuntimeError("LearnDash REST returned no parseable lessons.")
     return chapters
-
-
-def default_output_path(book: Book) -> Path:
-    return Path.cwd() / f"{safe_file_stem(book.title, book.source_url)}.epub"

@@ -5,3 +5,4 @@ Summary: Build clean EPUB files from WordPress + LearnDash book/course pages.
 Requires-Python: >=3.11
 Requires-Dist: beautifulsoup4>=4.12
 Requires-Dist: rich>=13.7
+Requires-Dist: Unidecode>=1.3

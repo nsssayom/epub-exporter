@@ -71,3 +71,16 @@ def build_summary(result: BuildResult, epubcheck_status: str) -> Panel:
     table.add_row("XML checked", str(result.xml_documents_checked))
     table.add_row("EPUBCheck", epubcheck_status)
     return Panel(table, title="[bold green]EPUB ready[/bold green]", border_style="green")
+
+
+def batch_summary(run_dir: Path, total: int, succeeded: int, failed: int) -> Panel:
+    table = Table(show_header=False, box=None, padding=(0, 1))
+    table.add_column("Field", style="bold")
+    table.add_column("Value")
+    table.add_row("Run directory", str(run_dir))
+    table.add_row("Total", str(total))
+    table.add_row("Succeeded", str(succeeded))
+    table.add_row("Failed", str(failed))
+    table.add_row("Logs", str(run_dir / "logs"))
+    style = "green" if failed == 0 else "yellow"
+    return Panel(table, title=f"[bold {style}]Batch complete[/bold {style}]", border_style=style)

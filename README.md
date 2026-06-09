@@ -34,6 +34,7 @@ WP_LMS_USERNAME=
 WP_LMS_PASSWORD=
 WP_LMS_APPLICATION_PASSWORD=
 WP_LMS_LANGUAGE=bn
+WP_LMS_OUTPUT_DIR=epubs
 ```
 
 `WP_LMS_APPLICATION_PASSWORD` is used for WordPress REST Basic Auth. The normal
@@ -53,6 +54,16 @@ Build an EPUB with authenticated LearnDash REST:
 ./.venv/bin/python -m wp_learndash_epub --confirm-rights -o book.epub 'https://example.com/books/book-slug/'
 ```
 
+Build with an automatic English/ASCII filename inside an output directory:
+
+```bash
+./.venv/bin/python -m wp_learndash_epub --confirm-rights --output-dir epubs 'https://example.com/books/book-slug/'
+```
+
+When `-o/--output` is not supplied, the CLI reads source metadata first and
+creates a romanized English filename from the book title. EPUB metadata keeps
+the original title and authors; only filesystem names are transliterated.
+
 After packaging, the CLI always performs built-in ZIP/XML validation. If
 `epubcheck` is installed on `PATH`, it also runs EPUBCheck automatically and
 shows the result in the final summary.
@@ -65,6 +76,45 @@ Use HTML lesson-page fallback instead of REST:
 
 The exporter refuses to build unless `--confirm-rights` is supplied. It does
 not bypass login, paywalls, DRM, capability checks, or restricted content.
+
+## Batch Mode
+
+Create a text file with one source URL per line. Blank lines and lines starting
+with `#` are ignored:
+
+```text
+https://example.com/books/book-one/
+https://example.com/books/book-two/
+```
+
+Run the batch:
+
+```bash
+./.venv/bin/python -m wp_learndash_epub --confirm-rights \
+  --batch-file books.txt \
+  --output-dir epub-runs
+```
+
+Batch mode creates a fresh run directory under the output root:
+
+```text
+epub-runs/
+  batch-20260609-011530-a1b2c3/
+    books/
+      001-english-book-title.epub
+      002-another-book-title.epub
+    logs/
+      batch.log
+      batch.jsonl
+      books/
+        001-english-book-title.log
+        002-another-book-title.log
+```
+
+The numbered EPUB filenames are English/ASCII slugs generated from metadata.
+The JSONL log is intended for scripting; the text logs are for quick inspection.
+By default the batch continues after individual failures. Add `--fail-fast` to
+stop after the first failed book.
 
 ## How It Works
 
@@ -80,6 +130,8 @@ not bypass login, paywalls, DRM, capability checks, or restricted content.
 - EPUB output: EPUB3 package document, XHTML navigation, NCX navigation for
   older Kindle tooling, cover image metadata, stable identifier, source URL,
   language, authors, and generation timestamp.
+- Naming: output paths use romanized English/ASCII slugs from metadata, with
+  stable hash fallback when a title cannot be transliterated.
 - Validation: the builder checks ZIP integrity, parses all generated XML, and
   automatically runs `epubcheck` when it is installed. EPUBCheck failures are
   treated as build failures.

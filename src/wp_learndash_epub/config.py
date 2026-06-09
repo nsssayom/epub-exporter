@@ -15,6 +15,7 @@ ENV_PREFIX = "WP_LMS_"
 class Settings:
     book_url: str | None
     output: Path | None
+    output_dir: Path | None
     language: str
     publisher: str | None
     credentials: Credentials | None
@@ -58,9 +59,11 @@ def settings_from_environment() -> Settings:
     app_password = compact_application_password(os.environ.get(f"{ENV_PREFIX}APPLICATION_PASSWORD"))
     credentials = Credentials(username, app_password) if username and app_password else None
     output = os.environ.get(f"{ENV_PREFIX}OUTPUT", "").strip()
+    output_dir = os.environ.get(f"{ENV_PREFIX}OUTPUT_DIR", "").strip()
     return Settings(
         book_url=os.environ.get(f"{ENV_PREFIX}BOOK_URL", "").strip() or None,
         output=Path(output) if output else None,
+        output_dir=Path(output_dir) if output_dir else None,
         language=os.environ.get(f"{ENV_PREFIX}LANGUAGE", "bn").strip() or "bn",
         publisher=os.environ.get(f"{ENV_PREFIX}PUBLISHER", "").strip() or None,
         credentials=credentials,
